@@ -54,6 +54,10 @@ Below that size Claude writing it is cheaper.
 - The server retries with the error text (default 2, max 5) and stops when the same error comes back
   twice. After a FAIL do not loop: split the spec, or write it yourself (ClaudPer circuit breaker).
 - A tester worker's tests follow ClaudeG test integrity: they must test the spec, never be weakened to pass.
+- Worker model (benchmark 2026-11-11, 8 tasks with hidden checkers): qwen2.5-coder:7b passed 5/8, 3b passed 3/8.
+  Default is 7b via `~/.claude/claudeboss.json` (`model`, `max_parallel 1`); 7b sits 84% on GPU at any num_ctx
+  (~22-24 tok/s) and cannot share 6 GB with claude-mem, so the two evict each other (cold load 40-60 s).
+  Pass `"model": "qwen2.5-coder:3b"` per task when speed matters more than quality.
 - Hardware (GTX 1660 Ti 6 GB, 16 GB RAM): qwen2.5-coder:3b ~2.5 GB at ctx 6144. claude-mem's
   claude-mem-llama also sits on this GPU (3.1 GB). If a result says GPU below 100%, lower
   `max_parallel` or `num_ctx` in `~/.claude/claudeboss.json`; Ollama otherwise spills to CPU and slows
