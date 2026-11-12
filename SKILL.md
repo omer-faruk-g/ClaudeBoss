@@ -30,6 +30,11 @@ Below that size Claude writing it is cheaper.
 - Few-shot through `files`: pass 1-2 existing project files as the style reference. The server reads them;
   Claude does not read them for this.
 - One file per task. Split big jobs into files that can each be checked alone.
+- **KEY POINT + examples** for any rule that is easy to get wrong: one sentence naming the trick (not
+  the code) and 3-5 input -> output examples incl. the error cases. E.g. roman: "compute the value,
+  then raise ValueError if to_roman(value) != s"; RLE: "counts can have several digits, validate with
+  re.fullmatch first"; Turkish slug: "map 'İ' before lower()". Benchmark 2026-11-11: the three tasks
+  7b failed with plain specs (slug, roman, RLE) all passed on the first try with this, same hidden checkers.
 
 ## 3. Calls
 
@@ -68,7 +73,8 @@ Below that size Claude writing it is cheaper.
 ## 6. Measure
 
 `boss_status` shows the pass rate, how much the workers wrote and how much summary text Claude got.
-Low pass rate (under ~60%) means specs too large or the model too weak: delegate less.
+Low pass rate (under ~60%) means specs too large or the model too weak: add KEY POINT + examples
+to the spec first, then delegate less.
 
 ## Known minuses and what covers them
 
